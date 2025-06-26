@@ -87,7 +87,8 @@ def render_header():
             if st.session_state.game_started and not st.session_state.game_stopped:
                 remaining_time = get_remaining_time()
                 st.markdown(f"⏳ **Time Left:** {remaining_time // 60:02d}:{remaining_time % 60:02d}")
-            st.markdown(f"💰 **Total Payoff:** {st.session_state.total_payoff} points")
+            if st.session_state.game_stopped:
+                st.markdown(f"💰 **Total Payoff:** {st.session_state.total_payoff} points")
 
 render_header()
 
@@ -149,3 +150,4 @@ with grid:
 if st.button("🔁 Restart Game"):
     restart_game()
     st.rerun()
+
