@@ -10,7 +10,7 @@ TIMER_DURATION = 3 * 60  # 3 minutes in seconds
 
 # Initialize session state
 if 'bomb_location' not in st.session_state:
-    st.session_state.bomb_location = (random.randint(0, GRID_SIZE-1), random.randint(0, GRID_SIZE-1))
+    st.session_state.bomb_location = (random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1))
 if 'selected_boxes' not in st.session_state:
     st.session_state.selected_boxes = set()
 if 'total_payoff' not in st.session_state:
@@ -34,7 +34,7 @@ def get_remaining_time():
     return max(0, TIMER_DURATION - int(elapsed))
 
 def restart_game():
-    st.session_state.bomb_location = (random.randint(0, GRID_SIZE-1), random.randint(0, GRID_SIZE-1))
+    st.session_state.bomb_location = (random.randint(0, GRID_SIZE - 1), random.randint(0, GRID_SIZE - 1))
     st.session_state.selected_boxes = set()
     st.session_state.total_payoff = 0
     st.session_state.game_started = False
@@ -81,7 +81,7 @@ def render_header():
             st.markdown("⏱ **Max time = 3 mins**")
         with top2:
             st.markdown(f"📦 **Boxes Clicked:** {len(st.session_state.selected_boxes)}")
-            if st.session_state.bomb_clicked:
+            if st.session_state.game_stopped and st.session_state.bomb_clicked:
                 st.markdown(f"💥 **Bomb at:** {st.session_state.bomb_clicked_at}")
         with top3:
             if st.session_state.game_started and not st.session_state.game_stopped:
@@ -150,4 +150,5 @@ with grid:
 if st.button("🔁 Restart Game"):
     restart_game()
     st.rerun()
+
 
