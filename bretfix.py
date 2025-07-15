@@ -42,7 +42,7 @@ with st.container():
     with col2:
         st.markdown(f"**Boxes Clicked:** {st.session_state.selected_index}")
         if st.session_state.game_stopped and st.session_state.bomb_clicked_at != get_row_col(st.session_state.selected_index - 1):
-            st.markdown(f"**Bomb was at:** {st.session_state.bomb_clicked_at}")
+            st.markdown("**Bomb was at:** revealed after game ends")
             st.markdown(f"**Total Payoff:** {st.session_state.total_payoff} points")
 
 # Start / Stop buttons
@@ -63,12 +63,10 @@ if st.session_state.game_started and not st.session_state.game_stopped:
     if st.button("Click Next Box"):
         row, col = get_row_col(st.session_state.selected_index)
         if (row, col) == st.session_state.bomb_location:
-            st.session_state.total_payoff = 0
             st.session_state.bomb_clicked_at = (row, col)
-            st.session_state.game_stopped = True
-        else:
-            st.session_state.total_payoff += BOX_PAYOFF
-            st.session_state.selected_index += 1
+            # Do not stop game immediately; wait for user to press Stop
+        st.session_state.total_payoff += BOX_PAYOFF
+        st.session_state.selected_index += 1
         st.rerun()
 
 # Display grid
@@ -102,3 +100,4 @@ with st.container():
 if st.button("🔁 Restart Game"):
     restart_game()
     st.rerun()
+
