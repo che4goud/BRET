@@ -140,5 +140,5 @@ with st.container():
 if st.button("🔁 Restart Game"):
     restart_game()
     st.rerun()
-)
+
 
