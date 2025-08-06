@@ -1,5 +1,3 @@
-# BRET Game - Mobile Compatible Version
-
 import streamlit as st
 import random
 import time
@@ -66,7 +64,7 @@ with col3:
 
 st.markdown(f"<h4 style='text-align:center;'>⏳ Time Remaining: {remaining_time} seconds</h4>", unsafe_allow_html=True)
 
-# --- Gameplay Grid ---
+# --- Grid Logic ---
 def click_box(i):
     if st.session_state.game_over or i in st.session_state.clicked:
         return
@@ -78,19 +76,35 @@ def click_box(i):
     else:
         st.session_state.total_payoff += 1
 
+# --- Render Grid with HTML/CSS ---
 if st.session_state.game_started:
-    for row in range(GRID_SIZE):
-        cols = st.columns(GRID_SIZE)
-        for col in range(GRID_SIZE):
-            i = row * GRID_SIZE + col
-            label = " "
-            disabled = i in st.session_state.clicked or st.session_state.game_over
-            if i in st.session_state.clicked:
-                if i == st.session_state.bomb_clicked_at:
-                    label = "💣"
-                else:
-                    label = "✅"
-            cols[col].button(label, key=f"box_{i}", on_click=click_box, args=(i,), disabled=disabled)
+    st.markdown(
+        """
+        <style>
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            max-width: 100%;
+        }
+        .grid-button {
+            width: 100%;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+    st.markdown("<div class='grid-container'>", unsafe_allow_html=True)
+    for i in range(GRID_SIZE * GRID_SIZE):
+        label = " "
+        disabled = i in st.session_state.clicked or st.session_state.game_over
+        if i in st.session_state.clicked:
+            if i == st.session_state.bomb_clicked_at:
+                label = "💣"
+            else:
+                label = "✅"
+        st.button(label, key=f"box_{i}", on_click=click_box, args=(i,), disabled=disabled)
+    st.markdown("</div>", unsafe_allow_html=True)
 
 # --- End Game Results ---
 if st.session_state.game_over:
